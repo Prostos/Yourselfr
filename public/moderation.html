@@ -1,0 +1,32 @@
+<div ng-controller="moderation">
+	<h3>Ждущие записи</h3>
+	<div ng-switch="me.profileType">
+		<div ng-switch-when="1">
+		Вы не используете функцию предварительной модерации сообщений.
+		Поэтому все сообщения, отправленные людьми, сразу отображаются на Вашей странице.
+		<div ng-controller="preferences">
+			<p><b>Хотите влючить</b> эту функцию?</p>
+			<label class="btn btn-default btn-block">
+				<div onclick="changeType(2)">Включить</div>
+			</label>
+		</div>
+		
+		</div>
+		<div ng-switch-when="2">
+			<div ng-controller="posts">
+				<div ng-repeat="post in posts">
+					{{post.text}}
+					<div ng-controller="timeCtrl as main" class="h6">
+						<a class="text-muted" am-time-ago="post.created_at"></a>
+					</div>
+					<div>
+						<a ng-click="accept(post._id)">опубликовать </a>
+						<a ng-click="remove(post._id)">удалить </a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+

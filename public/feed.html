@@ -1,0 +1,60 @@
+<div ng-controller="feed">
+	<h3>Новостная <b>лента</b></h3>
+	<div ng-switch="postsEmpty">
+		<div ng-switch-when="true">
+			<div class="rate_empty_line"></div>
+			<p class="text-center">Записей пока нет. Подпишитесь на кого-нибудь,<br> чтобы всегда получать свежие обновления.</p>
+		</div>
+		<div ng-switch-when="false">
+			<style>
+				.feed-post {
+					margin-top: -10px
+				}
+				.feed-post .username {
+					margin-bottom: 10px;
+				}
+				.border-top {
+					width: 650px;
+					margin-left: -25px;
+					margin-top: 0px;
+					min-height: 120px;
+				}
+				.block {
+					padding-bottom: 0px !important;
+					margin-bottom: 0px !important;
+				}
+				.wallpost-text {
+					max-width: 400px;
+				}
+			</style>
+			<div ng-repeat="post in posts" class="block border border-top padding-b-0" layout="row">
+				<div flex="20" style="margin-left:6px;">
+					<a href="{{post.user.alias}}">
+						<img title="{{post.user.status}}" src="upload/avatar/{{post.user.photo}}" class="avatar" width="100" height="100">
+					</a>
+				</div>
+				<div flex class="feed-post">
+					<a href="{{post.user.alias}}" class="inline-block"><h3 class="username">{{post.user.username}}</h3></a>
+					<div>
+						<div class="h3 wallpost-text inline-block" ng-bind-html="post.text | emoji"></div>
+						<div ng-controller="likes" class="fl-r like" style="margin-right: 10px; margin-top: 20px;">
+							<div ng-click="like(post._id)">
+								<div class="like-button"></div>
+								<div>
+									<a class="like-text">нравится 
+										<span ng-hide="showLikes">{{post.likes}}</span>
+										<span ng-show="showLikes">{{like.now}}</span>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div ng-controller="timeCtrl as main" class="h4" style="margin-top:20px; margin-bottom:10px;">
+							<a class="text-muted " am-time-ago="post.created_at"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>

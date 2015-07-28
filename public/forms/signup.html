@@ -1,0 +1,47 @@
+<div ng-controller="auth" ng-init="step=1">
+	<h1 class="text-center">Регистрация</h1>
+	<div class="row col-md-6 center">
+		<form class="form-action">
+			<div ng-switch="step">
+				<div ng-switch-when="1">
+					<div>
+						<md-input-container>
+							<label>Имя</label>
+							<input ng-model="user.username">
+						</md-input-container>
+						<md-input-container>
+							<label>Пароль</label>
+							<input type="password" ng-model="user.password">
+						</md-input-container>
+						<button class="btn-block button button-green" ng-click="register()">Зарегистрироваться</button>
+						<p ng-show="error" class="warn-message text-center">{{error}}</p>
+						<p ng-show="success" class="success-message text-center">{{success}}</p>
+					</div>
+				</div>
+				<div ng-switch-when="2">
+					<div class="email-form">
+						<md-input-container>
+							<p class="text-center">Получайте уведомления о новых<br> записях на почту.</p>
+							<label>Электронная почта</label>
+							<input type="email" ng-model="user.email">
+						</md-input-container>
+						<div class="inline-block">
+							<button ng-click="register(true)" class="button button-transparent" style="width: 150px;">Спасибо, не надо..</button>
+						</div>
+						<div class="inline-block">
+							<button ng-click="register(false)"  class="button" type="submit" style="width: 184px;">Продолжить</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+			<style type="text/css">
+				.email-form {
+					padding: 10px;
+					background-color: #E6F7FF;
+				}
+			</style>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,103 @@
+<div>
+	<div class="header" style="background-image: url(/upload/header/{{user.header}})">
+	</div>
+	<div>
+		<div class="">
+			<div ng-show="yourPage" class="h5 text-muted">
+				Рассказать друзьям об этом профиле <a href="http://vk.com/share.php?url=http://yourselfr.com/{{user.alias}}&amp;image=http://s019.radikal.ru/i602/1505/9b/d4749ad6abb1.png&amp;title=Узнайте обо мне больше на yourselfr!" target="_vk" class="blue-link">ВКонтакте</a>.
+				<div class="border-top"></div>
+				<div class="rate_empty_line"></div>
+			</div>
+			<div layout="row" layout-wrap>
+				<div flex="70">
+					<div layout="row" id="profile-info">
+						<div>
+							<img src="upload/avatar/{{user.photo}}" class="avatar" width="120" height="120">
+							<div ng-controller="subscriptions" ng-init="getStatus()" ng-hide="yourPage">
+								<button ng-click="follow(user._id)" ng-class="{false:'follow-button',true:'following-button'}[subStatus]"class="">
+									<div ng-switch="subStatus">
+										<div ng-switch-when="true">Подписки</div>
+										<div ng-switch-when="false">Подписаться</div>
+									</div >
+								</button>
+							</div>
+						</div>
+						<div class="userinfo">
+							<div class="inline-block h2"><b>{{user.username}} </b></div>
+							<div class="inline-block h3 grey">
+								@{{user.alias}}
+								<div class="inline-block" ng-show="user.online.status">
+									<img class="online" src="css/img/icons/online.png" width="9">
+									<md-tooltip md-direction="top" style="margin-left: 12px">Этот пользователь сейчас онлайн</md-tooltip>
+								</div>
+							</div>
+							<div ng-show="user.status" class="status">{{user.status}}</div>
+							<div ng-show="yourPage" class="h4">
+								<a href="preferences">настроить профиль</a><br>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div flex="30" class="usersocial">
+					<div><a class="text-muted text-decoration-none">постов <span class="badge">{{user.stats.posts}}</span></a></div>
+					<a href="about/proof" class="text-muted">просмотров <span class="badge">{{user.stats.visits}}</span></a><br>
+					<div style="margin-top:2px"><a class="text-muted" href="followers/{{user.alias}}">подписчиков <span class="badge">{{user.stats.followers}}</span></a></div>
+					<div><a class="text-muted" href="following/{{user.alias}}">читает <span class="badge">{{user.stats.following}}</span></a></div>
+					
+					<div style="margin-left: -3px">
+						<span ng-show="user.social.vk"><a target="_blank" href="http://vk.com/{{user.social.vk}}"><img width="30" style="margin-bottom: -2px;" src="css/img/icons/vk.jpg"></a></span>
+						<span ng-show="user.social.twitter"><a target="_blank" href="http://twitter.com/{{user.social.twitter}}"><img class="img-rounded" src="css/img/icons/twitter.jpg" width="25"></a></span>
+						<span ng-show="user.social.tumblr"><a target="_blank" href="{{user.social.tumblr}}"><img class="img-rounded" src="css/img/icons/tumblr.jpg" width="25"></a></span>
+						<span ng-show="user.social.askfm"><a target="_blank" href="http://ask.fm/{{user.social.askfm}}"><img class="img-rounded" style="margin-bottom: -1px " src="css/img/icons/askfm.png" width="26"></a></span>
+						<span ng-show="user.social.instagram"><a target="_blank" href="http://instagram.com/{{user.social.instagram}}"><img style="margin-bottom: -1px " src="css/img/icons/instagram.jpg" width="26"></a></span>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div ng-controller="posts" ng-init="getPosts()" class="wall">
+		<div ng-hide="yourPage">
+			<div class="emoji-holder">
+				<div class="emoji-open"></div>
+				<div class="emoji-folder">
+					<div ng-repeat="smile in emoji" class="inline-block">
+						<div class="emoji emoji-fo" ng-click="toPost(smile)" title="{{smile.title}}">
+							<img class="emoji" src="images/emoji/{{smile.source}}.png" width="10">
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<textarea placeholder="Напишите, что вы сейчас думаете об этом человеке.." class="forms" ng-model="newPost.text"></textarea>
+			<button class="button btn-block" ng-click="post()" ng-class="{true:'disabled', false:''}[!newPost.text]">Отправить</button>
+			<!-- <div ng-show="user.profileType==2" class="text-info">Ваше сообщение будет опубликовано сразу после того, как пройдёт проверку.</div> -->
+			
+			<div class="text-muted" ng-show="postStatus">
+				<div class="text-center padding">{{postStatus}}</div>
+			</div>
+		</div>
+		<div ng-switch="postsEmpty">
+			<div ng-switch-when="true">
+				<div class="wallpost block border text-center">
+					<div ng-if="yourPage==true" class="h4">
+						Нет записей в блоге.
+						Расскажите друзьям <a href="http://vk.com/share.php?url=http://yourselfr.com/{{user.alias}}&amp;image=http://s019.radikal.ru/i602/1505/9b/d4749ad6abb1.png&amp;title=Узнайте обо мне больше на yourselfr!" target="_vk" class="blue-link">ВКонтакте</a>, чтобы они написали здесь.
+					</div>
+					<div ng-if="!yourPage">
+						Нет записей в блоге.
+					</div>
+				</div>
+			</div>
+			<div ng-switch-when="false">
+				<div ng-repeat="post in posts track by $index" class="wallpost block border">
+					<div ng-include="'post.html'"></div>
+				</div>
+				<div ng-show="loadMoreStatus" style="margin-top:1px">
+					<button ng-click="loadMore()" class="button button-transparent btn-block">Читать ещё</button>
+				</div>
+				<div ng-show="thatsAll" class="text-center"></div>
+			</div>
+		</div>
+	</div>
+</div>

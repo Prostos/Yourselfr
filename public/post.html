@@ -1,0 +1,18 @@
+<div ng-controller="timeCtrl as main" class="h6">
+	<a class="text-muted " am-time-ago="post.created_at"></a>:
+	<a ng-show="yourPage" ng-click="remove(post._id)">| удалить </a>
+</div>
+<div class="post-text">
+	<div class="wallpost-text inline-block" ng-bind-html="post.text | emoji"></div>
+	<div ng-controller="likes" class="fl-r like">
+		<div ng-click="like(post._id)">
+			<div class="like-button"></div>
+			<div>
+				<a class="like-text">нравится 
+					<span ng-hide="showLikes">{{post.likes}}</span>
+					<span ng-show="showLikes">{{like.now}}</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>

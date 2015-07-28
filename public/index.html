@@ -1,0 +1,93 @@
+<html ng-app="app">
+	<head>
+		<title>Yourselfr</title>
+		<base href="/"/>
+		<meta charset="utf-8"/>
+		<link rel="stylesheet" href="css/yourselfr.css"/>
+		<link rel="stylesheet" href="css/normalize.css"/>
+
+
+		<link rel="apple-touch-icon" href="favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" href="favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" href="favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" href="favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" href="favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" href="favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" href="favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" href="favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" href="favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+		<link rel="manifest" href="favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		
+		<meta name="viewport" content="initial-scale=1" />
+	</head>
+	<body>
+		<nav class="navbar navbar-default" ng-controller="navbar">
+			<div class="container">
+				<div class="navbar-wrap">
+					<a class="navbar-brand" href="/"><img src="css/img/icons/logo_big.png" width="110"></a>
+					<div class="fl-r navbar-text" ng-show="authenticated"><span class="glyphicon glyphicon-cog icons" ng-click="goPreferences()"></span></div>
+					<div class="fl-r navbar-text" ng-show="authenticated"><span class="glyphicon glyphicon-th icons" ng-click="logout()"></span></div>
+					<span class="fl-r navbar-text" ng-show="logoutButton" ng-show="authenticated"><a ng-click="logout()">выйти</a></span>
+					<span class="navbar-right fl-r navbar-text" ng-hide="authenticated"><a href="login">войти</a></span>
+					<span class="fl-r navbar-text" style="margin-top: 13px; font-size: 16px;"><a href="{{me.alias}}"><b>{{me.username}}</b></a></span>
+				</div>
+			</div>
+		</nav>
+		<div class="container container-block">
+			<div ng-view></div>
+		</div>
+		<footer class="footer-block container row">
+			<div class="about-block center" id="about-block">
+				<a href="about">yourselfr</a>
+			</div>
+			
+		</footer>
+	</body>
+
+	<script src="scripts/firework.js"></script>
+	<!-- Angular Libraries -->
+	<script sync src="scripts/angularjs/angular.min.js"></script>
+	<script sync src="scripts/angularjs/angular-resource.min.js"></script>
+	<script sync src="scripts/angularjs/angular-route.min.js"></script>
+	<script sync src="scripts/angularjs/angular-animate.min.js"></script>
+	<script src="scripts/angularjs/angular-file-upload.min.js"></script>
+	<script src="scripts/angularjs/angular-aria.min.js"></script>
+	<script src="scripts/angularjs/angular-material.min.js"></script>
+	<script src="scripts/moment.js"></script>
+	<script src="scripts/angularjs/angular-moment.js"></script>
+
+	<!-- <script src="scripts/jquery.js"></script> -->
+	<!-- <script async src="scripts/d3.js"></script> -->
+	
+
+	<script src="controllers/controller.js"></script>
+	<script src="controllers/auth.js"></script>
+	<script src="controllers/user.js"></script>
+	<script src="controllers/posts.js"></script>
+	<script src="controllers/likes.js"></script>
+	<script src="controllers/systemStatus.js"></script>
+	<script src="controllers/subscriptions.js"></script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-65570914-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+	<script async src="https://cdn.onthe.io/io.js?OP63sHt8tqHG"></script>
+	
+</html>

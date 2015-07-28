@@ -1,0 +1,38 @@
+<div ng-controller="subscriptions" ng-init="getFollowing()">
+	<h3>Пользователи, на которых подписан <a href="{{user.alias}}">{{user.username}}</a>:</h3>
+	<md-divider></md-divider>
+	<div class="rate_empty_line_big"></div>
+	<div ng-show="noFollowing" class="text-center">
+		<div>Пользователь <a href="{{user.alias}}">{{user.username}}</a> пока ни на кого не подписан.</div>
+		<div class="rate_empty_line_big"></div>
+	</div>
+	<style type="text/css">
+		.follower {
+			margin: 10px 0px 10px 0px;
+			display: inline-block;
+			width: 150px;
+		}
+		.followers {
+			margin-left: -10px;
+		}
+		.follower-name {
+			margin-top: 10px;
+			margin-left: 5px;
+			word-wrap: normal;
+		}
+	</style>
+	<div class="followers">
+		<div ng-repeat="following in followings" class="follower">
+			<a href="{{following.alias}}">
+				<div style="margin-left:20px;"><img title="{{following.status}}" src="upload/avatar/{{following.photo}}" class="avatar" width="120" height="120"></div>
+				<div class="follower-name text-center">
+					<b>{{following.username}} </b>
+					<div class="inline-block" ng-show="following.online.status">
+						<img class="online" src="css/img/icons/online.png" width="9">
+						<md-tooltip md-direction="top" style="margin-left: 12px">Этот пользователь сейчас онлайн</md-tooltip>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>

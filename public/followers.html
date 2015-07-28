@@ -1,0 +1,39 @@
+<div ng-controller="subscriptions" ng-init="getFollowers()">
+	<h3>Подписчики <a href="{{user.alias}}">{{user.username}}</a>:</h3>
+	<md-divider></md-divider>
+	<div class="rate_empty_line_big"></div>
+	<div ng-show="noFollowers" class="text-center">
+		<div>У пользователя <a href="{{user.alias}}">{{user.username}}</a> пока нет подписчиков.</div>
+		<p ng-hide="authenticated"><a href="signup">Зарегистрируйтесь</a> и станьте первым!</p>
+		<div class="rate_empty_line_big"></div>
+	</div>
+	<style type="text/css">
+		.follower {
+			margin: 10px 0px 10px 0px;
+			display: inline-block;
+			width: 150px;
+		}
+		.followers {
+			margin-left: -10px;
+		}
+		.follower-name {
+			margin-top: 10px;
+			margin-left: 5px;
+			word-wrap: normal;
+		}
+	</style>
+	<div class="followers">
+		<div ng-repeat="follower in followers" class="follower">
+			<a href="{{follower.alias}}">
+				<div style="margin-left:20px;"><img title="{{follower.status}}" src="upload/avatar/{{follower.photo}}" class="avatar" width="120" height="120"></div>
+				<div class="follower-name text-center">
+					<b>{{follower.username}} </b>
+					<div class="inline-block" ng-show="follower.online.status">
+						<img class="online" src="css/img/icons/online.png" width="9">
+						<md-tooltip md-direction="top" style="margin-left: 12px">Этот пользователь сейчас онлайн</md-tooltip>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>

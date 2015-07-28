@@ -1,0 +1,29 @@
+<div ng-init="interval()">
+	<div>Пользователей: {{status.countUsers}}</div>
+	<div>Постов: {{status.countPosts}}</div>
+	<div>Лайков: {{status.countLikes}}</div>
+	<div>Запросов к API: {{status.countVisits || currency}}</div>
+	<div>Среднее время ответа: {{status.ping}} ms</div>
+	<div>Uptime: 100%</div>
+</div>
+
+<div ng-controller="secret">
+	<div ng-if="status=1">
+		<div class="rate_empty_line_big"></div>
+		<div ng-if="users">
+			<div ng-repeat="user in users" layout="row">
+				<div flex="30">
+					<a href="{{user.alias}}">{{user.username}}</a>
+				</div>
+				<div flex="20">
+					<div ng-controller="timeCtrl as main" class="h6">
+						<a class="text-muted " am-time-ago="user.created_at"></a>
+					</div>
+				</div>
+				<div flex="10">
+					{{user.stats.visits}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

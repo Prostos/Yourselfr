@@ -1,0 +1,153 @@
+ <div ng-controller="preferences" ng-init="selected=1">
+	<h2>Настройки</h3>
+	<div>
+		<md-button ng-click="selected=1">Общие</md-button>
+		<!-- <md-button ng-click="selected=2">Приватность</md-button>
+		<md-button ng-click="selected=3">Робот</md-button>
+		<md-button ng-click="selected=4">Удалить профиль</md-button> -->
+	</div>
+	<div ng-switch="selected">
+		<div ng-switch-when="1">
+			<div class="row col-md-10">
+				<div class="col-md-6">
+					<md-input-container>
+						<label>Имя пользователя</label>
+						<input ng-model="user.username">
+					</md-input-container>
+					<md-input-container>
+						<label>Адрес страницы пользователя (логин)</label>
+						<input ng-model="user.alias">
+					</md-input-container>
+					<md-input-container>
+						<label>О себе</label>
+						<textarea ng-model="user.status"></textarea>
+					</md-input-container>
+
+					<div class="rate_empty_line"></div>
+					<button class="button btn-block" ng-click="save(user.username, user.alias, user.status)">Сохранить информацию о пользователе</button>
+					<p ng-show="error" class="warn-message text-center">{{error}}</p>
+					<p ng-show="success" class="success-message text-center">{{success}}</p>
+				</div>
+				<h3>Фотографии</h3>
+				<div class="grey h4">
+					<div class="rate_empty_line_big"></div>
+
+					<div ng-controller="imageUpload">
+						<div class="inline-block">
+							<button class="button button-transparent" 
+								style="width: 200px;" 
+								ngf-select 
+								ng-model="avatar"
+								ngf-accept="'image/*'"
+								ngf-max-size='2097152'>Аватар
+							</button>
+						</div>
+						<div class="inline-block" style="margin-left: 20px;">
+							<a ng-hide="avatarMessage" ng-click="deleteAvatar()">Удалить аватар</a>
+							<div class="success-message" style="width:170px" ng-show="avatarMessage">{{avatarMessage}}</div>
+						</div>
+
+						<div class="rate_empty_line_big"></div>
+						<div class="inline-block">
+							<button class="button button-transparent" 
+								style="width: 200px;" 
+								ngf-select 
+								ng-model="header"
+								ngf-accept="'image/*'"
+								ngf-max-size='3097152'>Шапка
+							</button>
+						</div>
+						<div class="inline-block" style="margin-left: 20px;">
+							<a ng-hide="headerMessage" ng-click="deleteHeader()">Удалить шапку профиля</a>
+							<div class="success-message" style="width:170px" ng-show="headerMessage">{{headerMessage}}</div>
+						</div>
+						<style>
+							.info-block {
+								margin: 10px 0 10px 0;
+								width: 198px;
+								border-radius: 3px;
+								border: 1px solid #e7e7e7;
+								background-color: #fff;
+							}
+							.preloader {
+								width: 150px; 
+								margin: 20px; 
+								margin-left:80px;
+							}
+							.preloader-label {
+								width: 200px;
+								text-align: center;
+							}
+						</style>
+						<div ng-show="loading" class="info-block">
+							<div class="preloader"></div>
+							<div class="preloader-label" style="">Идёт загрузка..</div>
+						</div>
+					</div>
+					
+					<div class="rate_empty_line"></div>
+					<div class="margin">Максимальный размер фото: <b>3мб</b> (.png, .jpg)*</div>
+
+					<div class="rate_empty_line"></div>
+				</div>
+				<h3>Социальные сети</h3>
+				<div>
+					<style>
+						#vk-logo {
+							margin-left: -8px;
+							margin-top: -3px;
+						}
+						#twitter-logo, #tumblr-logo{
+							margin-top: 5px;
+						}
+						#insta-logo {
+							margin-left: -4px;
+						}
+						#askfm-logo {
+
+						}
+					</style>
+					<div ng-repeat="network in networks">
+						<div layout="row">
+							<div flex="10"><img src="{{network.icon}}" width="{{network.width}}" id="{{network.id}}"></div>
+							<div flex>
+								<md-input-container>
+									<label>{{network.label}}</label>
+									<input ng-model="network.model">
+								</md-input-container>
+							</div>
+						</div>
+					</div>
+					<div class="rate_empty_line"></div>
+					<button class="btn-block button" ng-click="saveSocial(networks[0].model, networks[1].model, networks[2].model, networks[3].model, networks[4].model)">Обновить настройки социальных сетей</button>
+					<p ng-show="statusSocial" class="success-message text-center">{{statusSocial}}</p>
+				</div>
+			</div>
+
+		</div>
+		<div ng-switch-when="2">
+			<div class="row">
+				<h3>Приватность</h3>
+				<!-- <h6>Тип профиля</h6>
+				<div class="btn-group">
+					<label class="btn btn-default" ng-class="{1:'active'}[user.profileType]">
+						<input name="year" type="radio" onclick="changeType(1)">Публичный
+					</label>
+					<div>Это значит, что любой пост, опубликованный анонимно, сразу же отобразится на Вашей странице.</div>
+					<label class="btn btn-default" ng-class="{2:'active'}[user.profileType]">
+						<input name="year" type="radio" onclick="changeType(2)">Модерируемый
+					</label>
+					<div class="h5">Какой-угодно пост сначала попадёт на модерацию к Вам, где вы выберите, стоит его опубликовать или нет.</div>
+				</div> -->
+				<h4 class="text-center grey">В разработке</h4>
+			</div>
+		</div>
+		<div ng-switch-when="3">
+			<h6>Робот-модератор</h6>
+			<h5><small>Робот <strong>проверяет</strong> посты на спам и <strong>удаляет</strong> те, которые спамом являются.</small></h5>
+			Включить робота
+		</div>
+		<div ng-switch-when="4">
+		</div>
+	</div>
+</div>
