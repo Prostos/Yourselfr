@@ -1,5 +1,6 @@
-var app = angular.module('app', ['ngRoute', 'ngResource', 'angularMoment', 'ngMaterial', 'ngFileUpload']).run(function($rootScope, $http, $location){
+var app = angular.module('app', ['ngRoute', 'ngResource', 'angularMoment', 'ngMaterial', 'ngFileUpload', 'ngMdIcons']).run(function($rootScope, $http, $location){
 	$rootScope.authenticated = false;
+
 
 	$http.get('/auth').success(function(user){
 		var url = $location.path().substr(1);
@@ -18,43 +19,51 @@ var app = angular.module('app', ['ngRoute', 'ngResource', 'angularMoment', 'ngMa
 			var path;
 
 			if(userAlias){
-				if(url == userAlias) $rootScope.yourPage = true;
-				else $rootScope.yourPage = false;
+				if(url == userAlias){
+					$rootScope.yourPage = true;
+					$rootScope.logoutButton = true;
+				} else if(url == 'preferences'){
+					// Show logout button when user is on his(her) page or in preferences.
+					$rootScope.logoutButton = true;
+				}
+				else {
+					$rootScope.yourPage = false;
+					$rootScope.logoutButton = false;
+				}
 			}
 			// If you are not authorized —— login && register && '' page are always ready for you.
 			// If you are authorized —— these pages will redirect you to feed page
 			if(url == 'login' || url == 'signup' || url == ''){
+				// Make container's WIDTH MORE Tight;
+				$rootScope.defaultContainer = false;
+
+
 				if($rootScope.authenticated == true) 
 					path = 'feed';
 			} else if(url == 'feed' || url == 'preferences' || url == 'moderation'){
+				$rootScope.defaultContainer = true;
 				if($rootScope.authenticated == false) 
 					path = 'login';
+			} else {
+				$rootScope.defaultContainer = true;
 			}
-
-
 			if(path){
 				$location.url('/'+path);
 			} 
-
-			// Show logout button when user is on his(her) page or in preferences.
-			if(url == user.alias || url == 'preferences'){
-				$rootScope.logoutButton = true;
-			} else {
-				$rootScope.logoutButton = false;
-			}
+			console.log($rootScope.defaultContainer);
 		});
 	});
 
 	$rootScope.logout = function(){
 		console.log("logging out...");
 		$rootScope.authenticated = false;
-		$rootScope.username = "";
-		$rootScope.alias = "";
-		$rootScope.user_ids = "";
+		$rootScope.username = undefined;
+		$rootScope.alias = undefined;
+		$rootScope.user_ids = undefined;
 		$http.get('auth/logout');
 		setTimeout(function(){
 			window.location.reload();
-		}, 1000);
+		}, 100);
 		
 	}
 });

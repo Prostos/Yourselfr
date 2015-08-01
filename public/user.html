@@ -18,7 +18,7 @@
 									<div ng-switch="subStatus">
 										<div ng-switch-when="true">Подписки</div>
 										<div ng-switch-when="false">Подписаться</div>
-									</div >
+									</div>
 								</button>
 							</div>
 						</div>
@@ -40,9 +40,24 @@
 				</div>
 				<div flex="30" class="usersocial">
 					<div><a class="text-muted text-decoration-none">постов <span class="badge">{{user.stats.posts}}</span></a></div>
-					<a href="about/proof" class="text-muted">просмотров <span class="badge">{{user.stats.visits}}</span></a><br>
-					<div style="margin-top:2px"><a class="text-muted" href="followers/{{user.alias}}">подписчиков <span class="badge">{{user.stats.followers}}</span></a></div>
-					<div><a class="text-muted" href="following/{{user.alias}}">читает <span class="badge">{{user.stats.following}}</span></a></div>
+					<a href="about/proof" class="text-muted">просмотров 
+						<span class="badge">{{user.stats.visits}}</span>
+					</a><br>
+					<div style="margin-top:2px">
+						<a class="text-muted" href="followers/{{user.alias}}">подписчиков 
+							<span class="badge">{{user.stats.followers}}</span>
+						</a>
+					</div>
+					<div>
+						<a class="text-muted" href="following/{{user.alias}}">читает 
+							<span class="badge">{{user.stats.following}}</span>
+						</a>
+					</div>
+					<div ng-show="yourPage">
+						<a href="moderation" ng-show="user.profileType==2">ждут вас
+							<span class="badge badge-blue">{{user.stats.unpublishedPosts}}</span>
+						</a>
+					</div>
 					
 					<div style="margin-left: -3px">
 						<span ng-show="user.social.vk"><a target="_blank" href="http://vk.com/{{user.social.vk}}"><img width="30" style="margin-bottom: -2px;" src="css/img/icons/vk.jpg"></a></span>
@@ -52,7 +67,6 @@
 						<span ng-show="user.social.instagram"><a target="_blank" href="http://instagram.com/{{user.social.instagram}}"><img style="margin-bottom: -1px " src="css/img/icons/instagram.jpg" width="26"></a></span>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -68,10 +82,23 @@
 					</div>
 				</div>
 			</div>
-			
-			<textarea placeholder="Напишите, что вы сейчас думаете об этом человеке.." class="forms" ng-model="newPost.text"></textarea>
+
+			<style>
+				.post-field {
+					padding: 0px 20px 0px 24px !important;
+					font-size: 16px !important;
+				}
+				.post-form {
+					padding-bottom: 0px !important;
+					margin-bottom: -6px !important;
+				}
+			</style>
+			<md-input-container md-no-float class="post-form">
+			  <textarea class="post-field" ng-model="newPost.text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Напишите, что вы думаете об этом человеке..'" placeholder="Напишите, что вы думаете об этом человеке.."></textarea>
+			</md-input-container>
+
 			<button class="button btn-block" ng-click="post()" ng-class="{true:'disabled', false:''}[!newPost.text]">Отправить</button>
-			<!-- <div ng-show="user.profileType==2" class="text-info">Ваше сообщение будет опубликовано сразу после того, как пройдёт проверку.</div> -->
+			
 			
 			<div class="text-muted" ng-show="postStatus">
 				<div class="text-center padding">{{postStatus}}</div>

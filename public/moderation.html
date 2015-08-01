@@ -1,32 +1,45 @@
 <div ng-controller="moderation">
-	<h3>Ждущие записи</h3>
+	<h3>Любезно ждущие вас записи</h3>
 	<div ng-switch="me.profileType">
 		<div ng-switch-when="1">
 		Вы не используете функцию предварительной модерации сообщений.
 		Поэтому все сообщения, отправленные людьми, сразу отображаются на Вашей странице.
 		<div ng-controller="preferences">
 			<p><b>Хотите влючить</b> эту функцию?</p>
-			<label class="btn btn-default btn-block">
-				<div onclick="changeType(2)">Включить</div>
+			<button class="button btn-block">
+				<div onclick="changeType(2); location.reload()">Включить</div>
 			</label>
 		</div>
 		
 		</div>
 		<div ng-switch-when="2">
+			<style>
+				.wallpost {
+					border: 0px;
+				}
+				.moderation {
+					border-top: 1px solid #F2F2F2;
+					border-bottom: 1px solid #F2F2F2;
+					padding-left: 5px;
+				}
+			</style>
 			<div ng-controller="posts">
-				<div ng-repeat="post in posts">
-					{{post.text}}
-					<div ng-controller="timeCtrl as main" class="h6">
-						<a class="text-muted" am-time-ago="post.created_at"></a>
-					</div>
-					<div>
-						<a ng-click="accept(post._id)">опубликовать </a>
-						<a ng-click="remove(post._id)">удалить </a>
+				<div ng-repeat="post in posts" class="wallpost block border moderation">
+					<div ng-include="'post.html'"></div>
+					<div style="font-size:10px" >
+						<a class="underline" ng-click="accept(post._id)">опубликовать</a> <a>|</a> 
+						<a class="underline" ng-click="removeModeration(post._id)">это спам</a>
 					</div>
 				</div>
 			</div>
+			<div class="rate_empty_line_big"></div>
 		</div>
 	</div>
-	
+	<div ng-show="noPosts" class="grey text-center">
+		На данный момент нет постов в модерации.
+		<div class="rate_empty_line_big"></div>
+	</div>
+
+
 </div>
 

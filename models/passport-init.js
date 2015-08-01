@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('users');
 var LocalStrategy = require('passport-local').Strategy;
+var VKontakteStrategy = require('passport-vkontakte').Strategy;
 var bCrypt = require('bcrypt-nodejs');
 
 module.exports = function(passport){
@@ -105,6 +106,20 @@ module.exports = function(passport){
 			});
 		})
 	);
+
+	passport.use(new VKontakteStrategy({
+			clientID:     5014067,
+			clientSecret: 'A0FPB99jQafaj8zraMyY',
+			callbackURL:  "http://yourselfr.com/auth/vk/callback"
+		},
+		function(accessToken, refreshToken, profile, done) {
+			console.log("ЭТО ТЕСТ БЛЯТЬ");
+			User.findOrCreate({ vkontakteId: profile.id }, function (err, user) {
+				console.log(user);
+				return done(err, user);
+			});
+		}
+	));
 	
 	var isValidPassword = function(user, password){
 		return bCrypt.compareSync(password, user.password);

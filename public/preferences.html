@@ -2,8 +2,8 @@
 	<h2>Настройки</h3>
 	<div>
 		<md-button ng-click="selected=1">Общие</md-button>
-		<!-- <md-button ng-click="selected=2">Приватность</md-button>
-		<md-button ng-click="selected=3">Робот</md-button>
+		<md-button ng-click="selected=2">Приватность </md-button><span class="beta">Beta</span>
+		<!-- <md-button ng-click="selected=3">Робот</md-button>
 		<md-button ng-click="selected=4">Удалить профиль</md-button> -->
 	</div>
 	<div ng-switch="selected">
@@ -127,19 +127,52 @@
 		</div>
 		<div ng-switch-when="2">
 			<div class="row">
-				<h3>Приватность</h3>
-				<!-- <h6>Тип профиля</h6>
-				<div class="btn-group">
-					<label class="btn btn-default" ng-class="{1:'active'}[user.profileType]">
-						<input name="year" type="radio" onclick="changeType(1)">Публичный
-					</label>
-					<div>Это значит, что любой пост, опубликованный анонимно, сразу же отобразится на Вашей странице.</div>
-					<label class="btn btn-default" ng-class="{2:'active'}[user.profileType]">
-						<input name="year" type="radio" onclick="changeType(2)">Модерируемый
-					</label>
-					<div class="h5">Какой-угодно пост сначала попадёт на модерацию к Вам, где вы выберите, стоит его опубликовать или нет.</div>
-				</div> -->
-				<h4 class="text-center grey">В разработке</h4>
+				<h3>Тип профиля</h3>
+
+
+				<p>Текущий тип: <span class="radioValue">
+					<span ng-switch="user.profileType">
+						<span ng-switch-when="1">«Открытый»</span>
+						<span ng-switch-when="2">«Модерируемый»</span>
+					</span>
+				</p>
+				<md-radio-group ng-model="user.profileType">
+					<style>
+						#open-profile {
+							margin: -10px;
+							margin-left: -25px;
+							padding-left: 25px;
+							margin-right: 5px;
+							padding-bottom: 40px;
+							text-align: center;
+						}
+						#moder-profile {
+							margin: -10px;
+							margin-right: -25px;
+							padding-left: 25px;
+							text-align: center;
+							padding-bottom: 40px;
+						}
+						#open-profile md-radio-button {
+							margin-left: 20px;
+							font-weight: bold;
+						}
+						#moder-profile md-radio-button {
+							margin-left: 30px;
+							font-weight: bold;
+						}
+					</style>
+					<div layout="row">
+						<div flex="55" class="blue-area padding" id="open-profile">
+							<md-radio-button value="1" checked class="md-primary" onclick="changeType(1)">Открытый</md-radio-button>
+							<div>Любой пост без промедления<br> <b>появляется</b> у вас в блоге.</div>
+						</div>
+						<div class="green-area padding" id="moder-profile">
+							<md-radio-button value="2" onclick="changeType(2)">Модерируемый</md-radio-button>
+							<div>Все записи попадают к Вам на <b><a href="moderation">модерацию</a></b>, а только затем в блог.</div>
+						</div>
+					</div>
+				</md-radio-group>
 			</div>
 		</div>
 		<div ng-switch-when="3">

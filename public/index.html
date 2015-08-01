@@ -25,16 +25,15 @@
 		<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 		<meta name="theme-color" content="#ffffff">
 
-		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="css/angular-material.min.css">
+
 		
 		<meta name="viewport" content="initial-scale=1" />
 	</head>
 	<body>
 		<nav class="navbar navbar-default" ng-controller="navbar">
 			<div class="container">
-				<div class="navbar-wrap">
+				<div ng-class="{'false' : 'navbar-auth'}[defaultContainer]" class="navbar-wrap">
 					<a class="navbar-brand" href="/"><img src="css/img/icons/logo_big.png" width="110"></a>
 					<div class="fl-r navbar-text" ng-show="authenticated"><span class="glyphicon glyphicon-cog icons" ng-click="goPreferences()"></span></div>
 					<div class="fl-r navbar-text" ng-show="authenticated"><span class="glyphicon glyphicon-th icons" ng-click="logout()"></span></div>
@@ -44,14 +43,13 @@
 				</div>
 			</div>
 		</nav>
-		<div class="container container-block">
+		<div ng-class="{'true':'container-block', 'false': 'auth-container'}[defaultContainer]">
 			<div ng-view></div>
 		</div>
 		<footer class="footer-block container row">
 			<div class="about-block center" id="about-block">
 				<a href="about">yourselfr</a>
 			</div>
-			
 		</footer>
 	</body>
 
@@ -67,10 +65,12 @@
 	<script src="scripts/moment.js"></script>
 	<script src="scripts/angularjs/angular-moment.js"></script>
 
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.5.0/angular-material-icons.min.js"></script> 
+
+
 	<!-- <script src="scripts/jquery.js"></script> -->
 	<!-- <script async src="scripts/d3.js"></script> -->
 	
-
 	<script src="controllers/controller.js"></script>
 	<script src="controllers/auth.js"></script>
 	<script src="controllers/user.js"></script>

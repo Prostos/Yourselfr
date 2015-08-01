@@ -1,4 +1,4 @@
-<h2 class="text-center">Вход</h2>
+<h1 class="text-center">Вход</h1>
 <div>
 	<form ng-submit="authorize()" class="form-action">
 
@@ -13,14 +13,19 @@
 		<div>
 			<div ng-switch="tryAuth">
 				<div ng-switch-when="false">
-					<button class="btn btn-primary btn-block button" type="submit">Вход</button>
+					<button class="btn btn-primary btn-block button" ng-hide="success" type="submit">Вход</button>
 				</div>
 				<div ng-switch-when="true">
 					<div class="preloader-login"></div>
 				</div>
 			</div>
 		</div>
-		<p ng-show="error" class="warn-message text-center">{{error}}</p>
+		<div class="rate_empty_line"></div>
+		
+		<p ng-show="error" class="warn-message text-center sample-show-hide">{{error}}</p>
 		<p ng-show="success" class="success-message text-center">{{success}}</p>
+		<div class="text-center"><a target="_blank" onclick="location = 'auth/vk'">
+			Войти через ВКонтакте.
+		</a></div>
 	</form>
 </div>

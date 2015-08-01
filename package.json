@@ -1,4 +1,10 @@
 {
+  "name": "Yourselfr",
+  "version": "0.0.1",
+  "description": "Anonymous Social Network",
+  "main": "app.js",
+  "man": "./man/doc.1",
+  "readme": "bla-bla-bla",
   "dependencies": {
     "async": "^1.3.0",
     "bcrypt-nodejs": "^0.0.3",
@@ -19,6 +25,7 @@
     "nodemailer": "^1.4.0",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
+    "passport-vkontakte": "^0.4.0",
     "prerender-node": "^2.0.1",
     "querystring": "^0.2.0"
   }

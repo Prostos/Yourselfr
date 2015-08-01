@@ -5,10 +5,12 @@ app.controller('auth', function($scope, $http, $rootScope, $location, $timeout){
 		if($scope.tryAuth == false){
 			$scope.tryAuth = true;
 		} else {
-			$timeout(function() {$scope.tryAuth = false }, 500);
+			$timeout(function() {$scope.tryAuth = false }, 300);
 		}
 	}
 
+
+	// Login via API.
 	$scope.authorize = function(){
 		if(!$scope.user.username){
 			$scope.error = "Введите логин";
@@ -35,12 +37,21 @@ app.controller('auth', function($scope, $http, $rootScope, $location, $timeout){
 						alias: data.user.alias,
 						user_ids: data.user._id,
 					}
-
-					$timeout(function(){ $location.path(data.user.alias)}, 1000);
+					$timeout(function(){ window.location = data.user.alias}, 1000);
 				}
 			});
 		}
 	}
+	// Auth via VK.COM
+	$scope.authVK = function(){
+		$http.get('auth/vk').success(function(callback){
+			console.log(callback);
+		});
+	}
+
+
+
+	// Registration via API.
 	$scope.firstStep = function(){
 		$scope.firstLayout = true;
 		$scope.secondLayout = false;
@@ -74,8 +85,6 @@ app.controller('auth', function($scope, $http, $rootScope, $location, $timeout){
 						console.log(data);
 					});
 				}
-
-
 				if(skipEmail == false){
 					// Check if email's here.
 					if($scope.user.email){
@@ -89,8 +98,6 @@ app.controller('auth', function($scope, $http, $rootScope, $location, $timeout){
 					finish();
 				}
 			}
-			console.log("asdsadsad");
-			
 		}
 	}
 });

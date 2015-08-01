@@ -95,5 +95,9 @@ function redirUrl(url){
 	var url = url.toString();
 }
 
-
-
+showToast = function(text) {
+	$mdToast.show({
+		position: "bottom left",
+		template: "<md-toast>"+ text +"</md-toast>"
+	});
+}

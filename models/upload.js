@@ -81,23 +81,23 @@ router.post('/header', function(req, res) {
 		console.log("Uploading: " + filename); 
 		
 
-		var path = 'public/upload/header/';
+		
 		var regex = new RegExp(/^(.*)\./);
 		var filename = filename.toString().replace(regex, req.session.passport.user + ".");
 		
+		var path = 'public/upload/header/'+filename;
 
-		fstream = fs.createWriteStream(path + filename);
+		fstream = fs.createWriteStream(path);
 		file.pipe(fstream);
 		fstream.on('close', function () {
-			lwip.open(path + filename, function(err, image){
-				if (err) throw err;
-
-				image.resize(700, 324, function(err, image){
-
-					image.writeFile(path + filename, function(er){
-						finish();
-					});
-				});
+			lwip.open(path, function(err, image){
+				// if (err) throw err;
+				// image.toBuffer('jpg', {quality: 30}, function(err, buffer){
+				// 	fs.writeFile(path, buffer, function(err){
+						
+				// 	});
+				// });
+				finish();
 			});
 
 			var finish = function(){

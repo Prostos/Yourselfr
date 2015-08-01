@@ -19,6 +19,9 @@ router.post('', function(req, res){
 		req.session.like = created_by;
 	}
 	Posts.findById(object, function(err, post){
+		if(!post){
+			return res.send({message: "error"});
+		}
 		Likes.findOne({object: object, created_by: created_by}, function(err, like){
 
 			if(err) throw err;

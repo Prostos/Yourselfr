@@ -45,7 +45,28 @@ var Control = function(){
 			return users;
 		});
 	}
+	this.countUnpublishedPosts = function(){
+		Users.find({profileType : 2}, function(err, users){
+			users.forEach(function(cuser, i){
+				Users.findById(cuser._id, function(err, user){
+					async.parallel([
+						function(callback){
+							Posts.count({type: 2, created_by: user._id}, function(err, count){
+								user.stats.unpublishedPosts = count;
+								callback(null);
+							});
+						}
+					], function(){
+						user.save();
+					});
+				});
+			});
+		});
+	}
 };
+
+var control = new Control();
+control.countUnpublishedPosts();
 
 router.post('', function(req, res){
 	var original = '9b317a357323f9639c1c20437d951603';

@@ -6,7 +6,7 @@ var tools = require('./../tools.js');
 var Users = mongoose.model('users');
 var Subscriptions = mongoose.model('subscriptions');
 
-//	User page generator.
+
 router.post('/follow', function(req, res){
 	if(!req.isAuthenticated()){
 		return res.send({status: -1, message:"Чтобы подписаться на этого пользователя, вы должны зарегистрироваться."});
@@ -131,7 +131,11 @@ router.get('/status/:following', function(req, res){
 });
 
 router.get('/followers', function(req, res){
-	var alias = req.query.alias.toLowerCase();
+	var alias = req.query.alias ? req.query.alias.toLowerCase() : undefined;
+
+	if(!alias){
+		return res.send({message: "no alias"});
+	}
 	// Find a man, whoose followers we gonna find
 	var User = Users.findOne({alias: alias}).select('username alias');
 	User.exec(function(err, user){

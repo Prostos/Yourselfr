@@ -32,7 +32,6 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 					});
 				}
 			});
-
 			offset += 15;
 		}
 	}
@@ -55,13 +54,6 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 	$scope.remove = function(_id){
 		api.Posts.remove({}, {'id': _id}, function success(posts){
 			$scope.getPosts();
-		});
-	}
-	// Accept post with status 2.
-	$scope.accept = function(_id){
-		api.Moderation.save({}, {'id': _id, 'action': 'accept'}, function(status){
-			alert(status);
-			console.log(status);
 		});
 	}
 	// Smiles by themselves!
@@ -130,10 +122,42 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 	}
 });
 
-app.controller('moderation', function($scope, $http, $rootScope, api){
-	api.Posts.query({type: 'moderation'}, function(posts){
-		$scope.posts = posts;
-	});
+app.controller('moderation', function($scope, $http, $rootScope, api, $mdToast){
+	function getModeration(){
+		api.Posts.query({type: 'moderation'}, function(posts){
+			if(posts.length == 0){
+				$scope.noPosts = true;
+			} else {
+				$scope.posts = posts;
+			}
+		});
+	}
+	getModeration();
+	
+	// Accept post with status 2.
+	$scope.accept = function(_id){
+		api.Moderation.save({}, {'id': _id, 'action': 'accept'}, function(resp){
+			var status = resp.status;
+			var message = resp.message;
+
+			showToast(message);
+
+			setTimeout(getModeration(), 1000);
+		});
+	}
+	$scope.removeModeration = function(_id){
+		api.Posts.remove({}, {'id': _id}, function success(posts){
+			console.log(posts);
+			showToast("Эта запись была удалена.");
+			getModeration();
+		});
+	}
+	showToast = function(text) {
+		$mdToast.show({
+			position: "bottom left",
+			template: "<md-toast>"+ text +"</md-toast>"
+		});
+	}
 });
 
 

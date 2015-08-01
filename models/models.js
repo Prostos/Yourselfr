@@ -23,7 +23,8 @@ var userSchema = new mongoose.Schema({
 		likes: {type: Number, default: 0},
 		followers: {type: Number, default: 0},
 		following: {type: Number, default: 0},
-		visits: {type: Number, default: 0}
+		visits: {type: Number, default: 0},
+		unpublishedPosts: {type: Number, default: 0}
 	},
 	online: {
 		status: Boolean,
