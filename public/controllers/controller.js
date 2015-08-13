@@ -1,6 +1,8 @@
-var app = angular.module('app', ['ngRoute', 'ngResource', 'angularMoment', 'ngMaterial', 'ngFileUpload', 'ngMdIcons']).run(function($rootScope, $http, $location){
+var app = angular.module('app', ['ngRoute', 'ngResource', 'angularMoment', 'ngMaterial', 'ngFileUpload']).run(function($rootScope, $http, $timeout, $location, $mdToast){
 	$rootScope.authenticated = false;
+	$rootScope.loaded = false;
 
+	
 
 	$http.get('/auth').success(function(user){
 		var url = $location.path().substr(1);
@@ -12,6 +14,9 @@ var app = angular.module('app', ['ngRoute', 'ngResource', 'angularMoment', 'ngMa
 		} else {
 			$rootScope.authenticated = false;
 		}
+
+		$rootScope.loaded = true;
+		
 		$rootScope.$watch(function() {
 			return $location.path();
 		}, function(){
@@ -64,6 +69,16 @@ var app = angular.module('app', ['ngRoute', 'ngResource', 'angularMoment', 'ngMa
 		setTimeout(function(){
 			window.location.reload();
 		}, 100);
+		
+	}
+
+	toast = function(text) {
+		$mdToast.show({
+			position: "bottom left",
+			template: "<md-toast>"+ text +"</md-toast>"
+		});
+	}
+	dialog = function(text){
 		
 	}
 });
@@ -147,8 +162,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdThemingP
 				templateUrl: 'following.html'
 			})
 			.when('/dev', {
-				templateUrl: 'status.html',
+				templateUrl: 'dev.html',
 				controller: 'systemStatus'
+			})
+			.when('/quickstart', {
+				templateUrl: 'quickstart.html'
 			})
 			.when('/dev/updates', {
 				templateUrl: 'updates.html'
@@ -165,6 +183,10 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdThemingP
 			})
 			.when('/about/phylosoply', {
 				templateUrl: 'phylosoply.html'
+			})
+			.when('/findme', {
+				controller: 'findme',
+				templateUrl: 'loading.html'
 			})
 			.when('/:id', {
 				templateUrl: 'user.html',

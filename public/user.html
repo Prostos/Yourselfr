@@ -2,19 +2,13 @@
 	<div class="header" style="background-image: url(/upload/header/{{user.header}})">
 	</div>
 	<div>
-		<div class="">
-			<div ng-show="yourPage" class="h5 text-muted">
-				Рассказать друзьям об этом профиле <a href="http://vk.com/share.php?url=http://yourselfr.com/{{user.alias}}&amp;image=http://s019.radikal.ru/i602/1505/9b/d4749ad6abb1.png&amp;title=Узнайте обо мне больше на yourselfr!" target="_vk" class="blue-link">ВКонтакте</a>.
-				<div class="border-top"></div>
-				<div class="rate_empty_line"></div>
-			</div>
 			<div layout="row" layout-wrap>
 				<div flex="70">
 					<div layout="row" id="profile-info">
 						<div>
 							<img src="upload/avatar/{{user.photo}}" class="avatar" width="120" height="120">
 							<div ng-controller="subscriptions" ng-init="getStatus()" ng-hide="yourPage">
-								<button ng-click="follow(user._id)" ng-class="{false:'follow-button',true:'following-button'}[subStatus]"class="">
+								<button class="button" ng-click="follow(user._id)" ng-class="{false:'follow-button',true:'following-button'}[subStatus]"class="">
 									<div ng-switch="subStatus">
 										<div ng-switch-when="true">Подписки</div>
 										<div ng-switch-when="false">Подписаться</div>
@@ -23,7 +17,7 @@
 							</div>
 						</div>
 						<div class="userinfo">
-							<div class="inline-block h2"><b>{{user.username}} </b></div>
+							<div class="inline-block h2"><b ng-bind="user.username"></b></div>
 							<div class="inline-block h3 grey">
 								@{{user.alias}}
 								<div class="inline-block" ng-show="user.online.status">
@@ -38,27 +32,31 @@
 						</div>
 					</div>
 				</div>
+
 				<div flex="30" class="usersocial">
-					<div><a class="text-muted text-decoration-none">постов <span class="badge">{{user.stats.posts}}</span></a></div>
-					<a href="about/proof" class="text-muted">просмотров 
-						<span class="badge">{{user.stats.visits}}</span>
+					<div><a class="text-muted text-decoration-none">посты <span class="badge">{{user.stats.posts}}</span></a></div>
+					<a href="about/proof" class="text-muted">просмотры 
+						<span class="badge" ng-bind="user.stats.visits"></span>
 					</a><br>
 					<div style="margin-top:2px">
-						<a class="text-muted" href="followers/{{user.alias}}">подписчиков 
-							<span class="badge">{{user.stats.followers}}</span>
+						<a href="followers/{{user.alias}}"class="text-muted">подписчики 
+							<span class="badge" ng-bind="user.stats.followers"></span>
 						</a>
 					</div>
 					<div>
 						<a class="text-muted" href="following/{{user.alias}}">читает 
-							<span class="badge">{{user.stats.following}}</span>
+							<span class="badge" ng-bind="user.stats.following"></span>
 						</a>
 					</div>
-					<div ng-show="yourPage">
+					<!-- <div ng-show="yourPage">
 						<a href="moderation" ng-show="user.profileType==2">ждут вас
-							<span class="badge badge-blue">{{user.stats.unpublishedPosts}}</span>
+							<span class="badge badge-blue" ng-bind="user.stats.unpublishedPosts"></span>
 						</a>
-					</div>
+					</div> -->
 					
+
+
+
 					<div style="margin-left: -3px">
 						<span ng-show="user.social.vk"><a target="_blank" href="http://vk.com/{{user.social.vk}}"><img width="30" style="margin-bottom: -2px;" src="css/img/icons/vk.jpg"></a></span>
 						<span ng-show="user.social.twitter"><a target="_blank" href="http://twitter.com/{{user.social.twitter}}"><img class="img-rounded" src="css/img/icons/twitter.jpg" width="25"></a></span>
@@ -67,7 +65,6 @@
 						<span ng-show="user.social.instagram"><a target="_blank" href="http://instagram.com/{{user.social.instagram}}"><img style="margin-bottom: -1px " src="css/img/icons/instagram.jpg" width="26"></a></span>
 					</div>
 				</div>
-			</div>
 		</div>
 	</div>
 	<div ng-controller="posts" ng-init="getPosts()" class="wall">
@@ -93,13 +90,14 @@
 					margin-bottom: -6px !important;
 				}
 			</style>
-			<md-input-container md-no-float class="post-form">
-			  <textarea class="post-field" ng-model="newPost.text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Напишите, что вы думаете об этом человеке..'" placeholder="Напишите, что вы думаете об этом человеке.."></textarea>
-			</md-input-container>
+			
+			<div id="postForm" class="im_editable" tabindex="0" ng-bind-html="textShow | unsafe" contenteditable="true" spellcheck="false">
+			</div>
+			<!-- <md-input-container md-no-float class="post-form">
+			  <textarea class="post-field" ng-model="newPost.text"  ></textarea>
+			</md-input-container> -->
 
-			<button class="button btn-block" ng-click="post()" ng-class="{true:'disabled', false:''}[!newPost.text]">Отправить</button>
-			
-			
+			<button class="button btn-block" ng-click="post()">Отправить</button>
 			<div class="text-muted" ng-show="postStatus">
 				<div class="text-center padding">{{postStatus}}</div>
 			</div>
@@ -107,7 +105,7 @@
 		<div ng-switch="postsEmpty">
 			<div ng-switch-when="true">
 				<div class="wallpost block border text-center">
-					<div ng-if="yourPage==true" class="h4">
+					<div ng-if="yourPage==true" class="h4" style="margin-top: -10px">
 						Нет записей в блоге.
 						Расскажите друзьям <a href="http://vk.com/share.php?url=http://yourselfr.com/{{user.alias}}&amp;image=http://s019.radikal.ru/i602/1505/9b/d4749ad6abb1.png&amp;title=Узнайте обо мне больше на yourselfr!" target="_vk" class="blue-link">ВКонтакте</a>, чтобы они написали здесь.
 					</div>

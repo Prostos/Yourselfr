@@ -9,6 +9,7 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 			} else {
 				$scope.postsEmpty = false;
 				$scope.posts = posts;
+				console.log(posts);
 
 				if(postsCount >= 15){
 					// Load 15 more posts.
@@ -37,8 +38,15 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 	}
 
 	$scope.newPost = {};
+	var text = document.getElementById("postForm");
+
+
 	$scope.post = function(){
 		$scope.newPost.created_by = alias;
+
+		
+		console.log(text.innerHTML);
+		$scope.newPost.text = text.innerHTML;
 
 		api.Posts.save($scope.newPost, function(res){
 			console.log(res);
@@ -47,6 +55,7 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 				$scope.getPosts();
 			}
 			$scope.postStatus = res.message;
+			$scope.user.stats.posts += 1;
 		});
 	}
 
@@ -54,20 +63,21 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 	$scope.remove = function(_id){
 		api.Posts.remove({}, {'id': _id}, function success(posts){
 			$scope.getPosts();
+			$scope.user.stats.posts -= 1;
 		});
 	}
 	// Smiles by themselves!
 	$scope.emoji = {
-		1:  {title: ':-)', source: "D83DDE0A"}, //0
-		2:  {title: ':-D', source: "D83DDE03"}, //1
-		3:  {title: ';-)', source: "D83DDE09"}, //2
-		4:  {title: 'xD',  source: "D83DDE06"}, //3
-		5:  {title: ';-P', source: "D83DDE1C"}, //4
-		6:  {title: ':-p', source: "D83DDE0B"}, //5
-		7:  {title: '8-)', source: "D83DDE0D"}, //6
-		8:  {title: 'B-)', source: "D83DDE0E"}, //7
-		9:  {title: ':-(', source: "D83DDE12"}, //8
-		10: {title: ';-]', source: "D83DDE0F"}, //9
+		1:  {title: ':-)', source: "D83DDE0A"},
+		2:  {title: ':-D', source: "D83DDE03"},
+		3:  {title: ';-)', source: "D83DDE09"},
+		4:  {title: 'xD',  source: "D83DDE06"},
+		5:  {title: ';-P', source: "D83DDE1C"},
+		6:  {title: ':-p', source: "D83DDE0B"},
+		7:  {title: '8-)', source: "D83DDE0D"},
+		8:  {title: 'B-)', source: "D83DDE0E"},
+		9:  {title: ':-(', source: "D83DDE12"},
+		10: {title: ';-]', source: "D83DDE0F"},
 		11: {title: '3(',  source: "D83DDE14"},
 		12: {title: ":'(", source: "D83DDE22"},
 		13: {title: ':_(', source: "D83DDE2D"},
@@ -94,12 +104,13 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 	  return this.split(search).join(replace);
 	}
 	$scope.toPost = function(smile){
-		if(!$scope.newPost.text){
-			$scope.newPost.text = smile.title;
+		if(!$scope.textShow){
+			$scope.textShow = "<img src='images/emoji/"+ smile.source +".png' width='18'>" + " ";
+			$scope.textSend =  smile.title +" ";
 		} else {
-			$scope.newPost.text += " " + smile.title;
+			$scope.textShow += " " + "<img src='images/emoji/"+ smile.source +".png' width='18'>" + " ";
+			$scope.textSend += " "+ smile.title +" ";
 		}
-		
 	}
 
 
@@ -123,39 +134,32 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 });
 
 app.controller('moderation', function($scope, $http, $rootScope, api, $mdToast){
-	function getModeration(){
+	$scope.getModeration = function(){
 		api.Posts.query({type: 'moderation'}, function(posts){
 			if(posts.length == 0){
 				$scope.noPosts = true;
+				$scope.posts = null;
 			} else {
 				$scope.posts = posts;
 			}
 		});
 	}
-	getModeration();
+	$scope.getModeration();
 	
 	// Accept post with status 2.
 	$scope.accept = function(_id){
 		api.Moderation.save({}, {'id': _id, 'action': 'accept'}, function(resp){
-			var status = resp.status;
 			var message = resp.message;
 
-			showToast(message);
-
-			setTimeout(getModeration(), 1000);
+			$scope.getModeration();
+			toast(message);
 		});
 	}
 	$scope.removeModeration = function(_id){
 		api.Posts.remove({}, {'id': _id}, function success(posts){
 			console.log(posts);
-			showToast("Эта запись была удалена.");
+			toast("Эта запись была удалена.");
 			getModeration();
-		});
-	}
-	showToast = function(text) {
-		$mdToast.show({
-			position: "bottom left",
-			template: "<md-toast>"+ text +"</md-toast>"
 		});
 	}
 });
@@ -172,6 +176,6 @@ app.controller('feed', function($scope, $http, api, $rootScope, $timeout){
 				$scope.posts = posts.posts;
 			}
 		});
-	}, 500);
+	}, 100);
 	
 });

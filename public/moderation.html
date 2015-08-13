@@ -1,5 +1,5 @@
 <div ng-controller="moderation">
-	<h3>Любезно ждущие вас записи</h3>
+	<h3>Модерация постов</h3>
 	<div ng-switch="me.profileType">
 		<div ng-switch-when="1">
 		Вы не используете функцию предварительной модерации сообщений.
@@ -36,7 +36,7 @@
 		</div>
 	</div>
 	<div ng-show="noPosts" class="grey text-center">
-		На данный момент нет постов в модерации.
+		На данный момент нет записей в модерации.
 		<div class="rate_empty_line_big"></div>
 	</div>
 

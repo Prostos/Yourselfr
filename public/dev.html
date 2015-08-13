@@ -1,0 +1,38 @@
+<div ng-init="interval()">
+	<div><b>Пользователей:</b> {{status.countUsers}}</div>
+	<div><b>Постов:</b> {{status.countPosts}}</div>
+	<div><b>Лайков:</b> {{status.countLikes}}</div>
+	<div><b>Запросов к API:</b> {{status.countVisits || currency}}</div>
+	<div><b>Среднее время ответа:</b> {{status.ping}} ms</div>
+	<div>Uptime: 100%</div>
+</div>
+
+<div ng-controller="secret" ng-show="devMode">
+	<div ng-if="status=1">
+		<div class="rate_empty_line_big"></div>
+		<div ng-if="users">
+			<div ng-repeat="user in users">
+				<div class="border-top"></div>
+				<div layout="row" class="margin" style="">
+					<div flex="30">
+						<a href="{{user.alias}}">{{user.username}}</a>
+					</div>
+					<div flex="20">
+						<div ng-controller="timeCtrl as main" class="h6">
+							<a class="text-muted " am-time-ago="user.created_at"></a>
+						</div>
+					</div>
+					<div flex="10">
+						{{user.stats.visits}}
+					</div>
+					<div flex="10">
+						<a ng-click="deleteUser(user._id)">Удалить</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<button class="btn-block" ng-click="countFollowersAndFollowing()">Пересчитать подписки и подписчиков всех пользователей.</button>
+	<button class="btn-block" ng-click="countUnpublishedPosts()">Пересчитать неопубликованные сообщения.</button>
+	<button class="btn-block" ng-click="recountPosts()">Пересчитать счётчик сообщений.</button>
+</div>

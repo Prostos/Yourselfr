@@ -1,6 +1,6 @@
 <div ng-controller="subscriptions" ng-init="getFollowers()">
 	<h3>Подписчики <a href="{{user.alias}}">{{user.username}}</a>:</h3>
-	<md-divider></md-divider>
+	<div class="border-top"></div>
 	<div class="rate_empty_line_big"></div>
 	<div ng-show="noFollowers" class="text-center">
 		<div>У пользователя <a href="{{user.alias}}">{{user.username}}</a> пока нет подписчиков.</div>

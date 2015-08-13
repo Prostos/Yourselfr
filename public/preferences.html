@@ -1,12 +1,17 @@
  <div ng-controller="preferences" ng-init="selected=1">
 	<h2>Настройки</h3>
 	<div>
-		<md-button ng-click="selected=1">Общие</md-button>
-		<md-button ng-click="selected=2">Приватность </md-button><span class="beta">Beta</span>
+		<!-- <md-button ng-click="selected=1">Общие</md-button> -->
+		<!-- <md-button ng-click="selected=2">Приватность </md-button> -->
 		<!-- <md-button ng-click="selected=3">Робот</md-button>
 		<md-button ng-click="selected=4">Удалить профиль</md-button> -->
 	</div>
 	<div ng-switch="selected">
+		<!-- <div ng-show="yourPage" class="h5 text-muted">
+			Рассказать друзьям об этом профиле <a href="http://vk.com/share.php?url=http://yourselfr.com/{{user.alias}}&amp;image=http://s019.radikal.ru/i602/1505/9b/d4749ad6abb1.png&amp;title=Узнайте обо мне больше на yourselfr!" target="_vk" class="blue-link">ВКонтакте</a>.
+			<div class="border-top"></div>
+			<div class="rate_empty_line"></div>
+		</div> -->
 		<div ng-switch-when="1">
 			<div class="row col-md-10">
 				<div class="col-md-6">
@@ -92,21 +97,6 @@
 				</div>
 				<h3>Социальные сети</h3>
 				<div>
-					<style>
-						#vk-logo {
-							margin-left: -8px;
-							margin-top: -3px;
-						}
-						#twitter-logo, #tumblr-logo{
-							margin-top: 5px;
-						}
-						#insta-logo {
-							margin-left: -4px;
-						}
-						#askfm-logo {
-
-						}
-					</style>
 					<div ng-repeat="network in networks">
 						<div layout="row">
 							<div flex="10"><img src="{{network.icon}}" width="{{network.width}}" id="{{network.id}}"></div>
@@ -137,31 +127,6 @@
 					</span>
 				</p>
 				<md-radio-group ng-model="user.profileType">
-					<style>
-						#open-profile {
-							margin: -10px;
-							margin-left: -25px;
-							padding-left: 25px;
-							margin-right: 5px;
-							padding-bottom: 40px;
-							text-align: center;
-						}
-						#moder-profile {
-							margin: -10px;
-							margin-right: -25px;
-							padding-left: 25px;
-							text-align: center;
-							padding-bottom: 40px;
-						}
-						#open-profile md-radio-button {
-							margin-left: 20px;
-							font-weight: bold;
-						}
-						#moder-profile md-radio-button {
-							margin-left: 30px;
-							font-weight: bold;
-						}
-					</style>
 					<div layout="row">
 						<div flex="55" class="blue-area padding" id="open-profile">
 							<md-radio-button value="1" checked class="md-primary" onclick="changeType(1)">Открытый</md-radio-button>

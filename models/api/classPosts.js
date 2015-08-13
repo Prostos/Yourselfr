@@ -35,8 +35,28 @@ router.get('', function(req, res){
 				res.send({message: "User is not found"});
 			} else {
 				var user_id = user._id;
-				Posts.find({created_by: user_id, type: 1}).sort({_id: -1}).skip(offset).limit(15).exec(function(err, posts){
-					res.send(posts);
+				Posts.find({created_by: user_id, type: 1}).sort({_id: -1}).skip(offset).limit(15).lean().exec(function(err, posts){
+
+					var created_by_like = req.session.like;
+
+					if(created_by_like){
+						async.each(posts, function(post, callback){
+							Likes.findOne({object: post._id, created_by: created_by_like}, function(err, like){
+								if(like){
+									post.isLiked = true;
+								} else {
+									post.isLiked = false;
+								}
+								callback(null);
+							});
+						}, function(err){
+							console.log(posts);
+							res.send(posts);
+						});
+					} else {
+						res.send(posts);
+					}
+					
 				});
 			}
 		});
@@ -66,10 +86,28 @@ router.get('/feed', function(req, res){
 				return res.send({status:0});
 			}
 
+			// For likes
+			var created_by_like = req.session.like;
+
 			var postsArr = [];
 			posts.forEach(function(post, i){
 				postsArr.push(post.created_by);
+
+
+				// What about likes?
+
+				if(created_by_like){
+					Likes.findOne({object: post._id, created_by: created_by_like}, function(err, like){
+						if(like){
+							post.isLiked = true;
+						} else {
+							post.isLiked = false;
+						}
+					});
+				}
 			});
+
+
 			Users.find({_id: { $in : postsArr}}).select('photo online alias username').lean().exec(function(err, users){
 				posts.forEach(function(post, i){
 					users.forEach(function(user, e){
@@ -78,30 +116,8 @@ router.get('/feed', function(req, res){
 						}
 					});
 				})
-				
-				// console.log(posts);
 				res.send({posts:posts});
 			});
-			// async.waterfall([
-			// 	function(callback){
-			// 		posts.forEach(function(post, i){
-			// 			Users.findById(post.created_by).select('photo online alias username').exec(function(err, user){
-			// 				posts[i].user = user;
-
-
-			// 				// ПЕРЕДЕЛАТЬ ВСЁ НАХУЙ, ПОТОМУ ЧТО ГОВНОКОД.
-			// 				if(i == posts.length-1){
-			// 					callback(null);
-			// 				}
-			// 			});
-			// 		});
-
-			// 	}
-			// ], function(err){
-			// 	if(err) throw err;
-			// 	console.log(posts);
-			// 	res.send({posts:posts});
-			// });
 		});
 	});
 });
@@ -111,7 +127,7 @@ router.get('/feed', function(req, res){
 // Publish a post.
 // api/posts
 router.post('', function(req, res){
-	var alias = req.body.created_by;
+	var alias = req.body.created_by ? req.body.created_by.toLowerCase() : undefined;
 	if(!alias) res.send({message: "Empty alias"});
 	else {
 		Users.findOne({alias: alias}, function(err, user){
@@ -126,26 +142,40 @@ router.post('', function(req, res){
 				} else if(req.body.text.length > 300){
 					res.send({message: "Максимальная длина поста — 299 символов"});
 				} else {
-					// Check user profile type
-					// If 1 send to wall.
-					// If 2 send to moderating
 
-					if(user.profileType == 2){
-						newPost.type = 2;
-						user.stats.unpublishedPosts += 1;
-						user.save();
-					} else {
-						newPost.type = 1;
-					}
-					newPost.text = req.body.text;
-					newPost.created_by = user._id;
-					newPost.save(function(err){
-						if(err) throw err;
+					// Check if this post not equals to the previous one
+					// If it is -> Error message
+					// Otherwise continue
+					
+					Posts.findOne({}).sort({_id: -1}).exec(function(err, post){
+						if(post.text == req.body.text){
+							return res.send({message: "Вы не можете отправить две одинаковые записи подряд."});
+						}
 
-						var message = (user.profileType == 1) ? "Опубликовано" : "Запись появится в блоге, как только "+ user.username + " её одобрит.";
-						res.send({status: 1, message: message});
-						tools.countUserPosts(user._id);
+						// Check user profile type
+						// If 1 send to wall.
+						// If 2 send to moderating
+
+						if(user.profileType == 2){
+							newPost.type = 2;
+							user.stats.unpublishedPosts += 1;
+							user.save();
+						} else {
+							newPost.type = 1;
+						}
+						newPost.text = req.body.text;
+						newPost.created_by = user._id;
+						newPost.save(function(err){
+							if(err) throw err;
+
+							var message = (user.profileType == 1) ? "Опубликовано" : "Запись появится в блоге, как только "+ user.username + " её одобрит.";
+							res.send({status: 1, message: message});
+
+							//Count the value of user's posts after publishing.
+							tools.countUserPosts(user._id);
+						});
 					});
+					
 				}
 			}
 		});
@@ -180,6 +210,7 @@ router.delete('/:id', function(req, res){
 						user.stats.posts = user.stats.posts - 1;
 
 						if(post.type == 2){
+
 							user.stats.unpublishedPosts -= 1;
 						}
 

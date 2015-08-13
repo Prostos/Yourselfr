@@ -8,10 +8,12 @@ app.controller('subscriptions', function($scope, $http, api, $mdDialog, $mdToast
 			if(status == -1){
 				showAlert();
 			} else if(status == 1){
-				$scope.showToast('Подписка успешно оформлена.');
+				toast('Подписка успешно оформлена.');
+				$scope.user.stats.followers += 1;
 			} else {
 				console.log(status);
-				$scope.showToast('Подписка успешно отменена.');
+				toast('Подписка успешно отменена.');
+				$scope.user.stats.followers -= 1;
 			}
 
 			if(status == 1 || status == 2){
@@ -88,13 +90,6 @@ app.controller('subscriptions', function($scope, $http, api, $mdDialog, $mdToast
 			}
 			
 			console.log(res);
-		});
-	}
-
-	$scope.showToast = function(text) {
-		$mdToast.show({
-			position: "bottom left",
-			template: "<md-toast>"+ text +"</md-toast>"
 		});
 	}
 });

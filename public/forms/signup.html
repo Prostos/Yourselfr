@@ -6,11 +6,11 @@
 					<div>
 						<md-input-container>
 							<label>Имя</label>
-							<input ng-model="user.username">
+							<input autocomplete="off" ng-model="user.username">
 						</md-input-container>
 						<md-input-container>
 							<label>Пароль</label>
-							<input type="password" ng-model="user.password">
+							<input autocomplete="off" type="password" ng-model="user.password">
 						</md-input-container>
 						<button class="btn-block button button-green" ng-click="register()">Завести страничку</button>
 						<p ng-show="error" class="warn-message text-center">{{error}}</p>

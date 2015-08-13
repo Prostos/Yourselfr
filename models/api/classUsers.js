@@ -19,7 +19,6 @@ router.get('/:alias', function(req, res){
 		if(user == null){
 			res.send({status: "404"});
 		} else {
-			console.log(user);
 			// Online manager
 			if(user._id == req.session.passport.user){
 				user.online.status = true;
@@ -144,7 +143,7 @@ router.post('', function(req, res){
 
 	function bannedAlias(alias){
 		var alias = alias.toString().toLowerCase();
-		var banned = ['404', 'admin', 'preferences', 'signup', 'yourselfr', 'blocked'];
+		var banned = ['404', 'admin', 'preferences', 'signup', 'yourselfr', 'blocked', 'findme'];
 		for (var i=0; i<banned.length;i++){
 			if(banned[i] == alias){
 				return true;
@@ -152,6 +151,26 @@ router.post('', function(req, res){
 		}
 		return false;
 	}
+});
+
+
+
+router.post('/findme', function(req, res){
+	if(req.isAuthenticated()){
+		var userid = req.session.passport.user;
+		Users.findById(userid, function(err, user){
+			if(err) throw err;
+			var url = user.alias;
+			res.send({url:url});
+		});
+	}
+});
+
+router.post('/popular', function(req, res){
+	Users.find({}).limit(5).sort({_id: -1}).select('alias username photo status -_id').exec(function(err, users){
+		if(err) throw err;
+		res.send(users);
+	});
 });
 
 

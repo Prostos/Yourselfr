@@ -79,7 +79,7 @@ app.controller('auth', function($scope, $http, $rootScope, $location, $timeout){
 			} else if($scope.step == 2){
 				var finish = function(){
 					$http.post('auth/signup', $scope.user).success(function(user){
-						window.location.href = '/';
+						window.location.href = '/quickstart';
 					}).error(function(data){
 						console.log("Thats an error!");
 						console.log(data);

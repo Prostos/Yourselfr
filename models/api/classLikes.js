@@ -52,16 +52,6 @@ router.post('', function(req, res){
 			res.send({status: status, now: post.likes});
 		});
 	});
-	// Likes.find({object: object, created_by: created_by}, function(err, like){
-	// 	if(err) throw err;
-	// 	if(like){
-	// 		Likes.remove({object: object, created_by: created_by}, function(err, result){
-
-	// 		});
-	// 	} else {
-	// 		
-	// 	}
-	// });
 });
 
 // api/likes/:id
@@ -69,7 +59,16 @@ router.get('/:id', function(req, res){
 	var id = req.params.id;
 
 	Likes.find({object: id}, function(err, likes){
+		var likes = likes;
+		var created_by = req.session.like;
+
+		likes.forEach(function(like){
+			if(like.created_by == created_by){
+				like.owner = true;
+			}
+		});
 		res.send(likes);
+
 	});
 });
 

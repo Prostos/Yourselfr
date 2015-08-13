@@ -101,3 +101,6 @@ showToast = function(text) {
 		template: "<md-toast>"+ text +"</md-toast>"
 	});
 }
+
+
+

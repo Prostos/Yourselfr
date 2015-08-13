@@ -29,7 +29,7 @@ module.exports = {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
 	countUserPosts: function(_id){
-		Posts.count({created_by: _id}, function(err, posts){
+		Posts.count({created_by: _id, type: 1}, function(err, posts){
 			if(!err){
 				Users.findById(_id, function(err, user){
 					if(!err){

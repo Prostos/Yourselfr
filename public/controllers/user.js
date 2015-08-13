@@ -129,3 +129,22 @@ app.controller('preferences', function($scope, $http, $rootScope, $location, $ti
 		});
 	}
 });
+
+// This service will redirect any registered user to his personally page
+app.controller('findme', function($http, $location){
+	$http.post('/api/users/findme').success(function(url){
+		if(url){
+			$location.path(url.url);
+		} else {
+
+		}
+		
+	});
+});
+
+app.controller('popularPeople', function($http, $location, $scope){
+	$http.post('/api/users/popular').success(function(people){
+		console.log(people);
+		$scope.users = people;
+	});
+});

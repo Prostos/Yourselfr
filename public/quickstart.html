@@ -1,0 +1,29 @@
+<div class="text-center">
+<h3>Как начать пользоваться Йорселфером<br>за двенадцать секунд?</h3>
+Засекайте время и мы начинаем...
+</div>
+
+<div ng-show="authenticated">
+	<h4>Шаг 1</h4>
+	<div class="text-center">Быстренько пробегитесь по <b>настройкам</b> и сделайте так, <br>чтобы всё выглядело, как вы любите.</div>
+	
+	
+	
+	<h4>Шаг 2</h4>
+	<div class="text-center">Интегрируйте Ваш профиль с любой из <b>социальных сетей</b>.<br>
+	Для этого просто оставьте ссылку на вашу страницу в любой из них.</div>
+	
+	<div class="rate_empty_line_big"></div>
+		<a href="http://vk.com/share.php?url=http://yourselfr.com/{{me.alias}}&amp;image=http://s019.radikal.ru/i602/1505/9b/d4749ad6abb1.png&amp;	title=Узнайте обо мне больше на yourselfr!" target="_vk" class="blue-link"><img width="60" style="margin-left: 210px;" src="css/img/icons/vk.jpg"></a>
+		
+	</a>
+	<a href="http://twitter.com/home?status=Узнайте обо мне больше на http://yourselfr.com/{{me.alias}}"><img class="img-rounded" src="css/img/icons/twitter	.jpg" style="margin-bottom:8px; margin-left: 30px;"width="47">
+	</a>
+	
+	<div class="rate_empty_line_big"></div>
+	<a href="findme"><button class="button btn-block">Начать пользоваться!</button></a>
+</div>
+
+<div ng-show="!authenticated" class="text-center padding margin">
+	К сожалению, Вы не можете использовать все функции Йорселфера,<br> будучи неавторизованным.
+</div>

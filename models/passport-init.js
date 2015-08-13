@@ -110,16 +110,39 @@ module.exports = function(passport){
 	passport.use(new VKontakteStrategy({
 			clientID:     5014067,
 			clientSecret: 'A0FPB99jQafaj8zraMyY',
-			callbackURL:  "http://yourselfr.com/auth/vk/callback"
+			callbackURL:  "http://localhost:1337/auth/vk/callback"
 		},
 		function(accessToken, refreshToken, profile, done) {
-			console.log("ЭТО ТЕСТ БЛЯТЬ");
-			User.findOrCreate({ vkontakteId: profile.id }, function (err, user) {
-				console.log(user);
-				return done(err, user);
+
+			User.findOne({ vkID: profile.id }, function (err, user) {
+				if(user){
+					console.log(user);
+					return done(null, user);
+				} else {
+					newUser = new User();
+
+					newUser.username = profile.displayName;
+					newUser.alias = profile.username;
+					newUser.social.vk = profile.profileUrl;
+					// newUser.photo = profile.photos[0].value;
+					newUser.vkID = profile.id;
+
+					newUser.save(function(err) {
+						if (err){
+							console.log('Error in Saving user: '+err);
+							throw err;  
+						}
+						console.log(newUser.username + ' Registration succesful');
+						return done(null, newUser); 
+					});
+				}
 			});
 		}
 	));
+
+	var register = function(){
+
+	}
 	
 	var isValidPassword = function(user, password){
 		return bCrypt.compareSync(password, user.password);

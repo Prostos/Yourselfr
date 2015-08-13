@@ -1,6 +1,6 @@
 <div ng-controller="subscriptions" ng-init="getFollowing()">
 	<h3>Пользователи, на которых подписан <a href="{{user.alias}}">{{user.username}}</a>:</h3>
-	<md-divider></md-divider>
+	<div class="border-top"></div>
 	<div class="rate_empty_line_big"></div>
 	<div ng-show="noFollowing" class="text-center">
 		<div>Пользователь <a href="{{user.alias}}">{{user.username}}</a> пока ни на кого не подписан.</div>

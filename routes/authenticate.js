@@ -67,7 +67,7 @@ module.exports = function(passport){
 	router.get('/vk/callback', passport.authenticate('vkontakte', { failureRedirect: '/login' }),
 		function(req, res) {
 		// Successful authentication, redirect home.
-		res.redirect('/lgs');
+		res.redirect('/');
 	});
 
 

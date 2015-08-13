@@ -3,18 +3,17 @@
 </div>
 <div class="post-text">
 	<div class="wallpost-text inline-block" ng-bind-html="post.text | emoji"></div>
-
 	<div ng-controller="likes" class="fl-r like">
 		<div class="delete-button" ng-show="yourPage">
 			<md-tooltip md-direction="top">Удалить</md-tooltip>
 			<ng-md-icon class="pointer" icon="close" style="fill: #148BC3" size="22"  ng-click="remove(post._id)"></ng-md-icon> 
 		</div>
 		<div ng-click="like(post._id)">
-			<div class="like-button"></div>
+			<div class="like-button" ng-class="{'true':'like-done', 'false':'like-usual'}[post.isLiked]"></div>
 			<div>
 				<a class="like-text">нравится 
 					<span ng-hide="showLikes">{{post.likes}}</span>
-					<span ng-show="showLikes">{{like.now}}</span>
+					<span ng-show="showLikes">{{likesNow}}</span>
 				</a>
 			</div>
 		</div>

@@ -63,13 +63,73 @@ var Control = function(){
 			});
 		});
 	}
+	this.banUser = function(userID, reason){
+		if(!userID || !reason){
+			return false;
+		}
+		Users.findById(userID, function(err, user){
+			if (err) throw err;
+			if(user){
+				user.ban.status = true;
+				user.ban.reason = reason;
+				user.save(function(err){
+					if(err) throw err;
+					return true;
+				});
+			}
+		});
+	}
+	this.unbanUser = function(userID){
+		if(!userID){
+			return false;
+		}
+		Users.findById(userID, function(err, user){
+			if(err) throw err;
+			if(user){
+				user.ban.status = false;
+				user.ban.reason = "";
+				user.save(function(err){
+					if(err) throw err;
+					return true;
+				});
+			}
+		});
+	}
+
+	this.deleteUser = function(userID){
+		console.log(userID);
+		Users.remove({_id: userID}, function(err){
+			if(err) throw err;
+			return true;
+		});
+	}
+
+	this.changePhotoPath = function(){
+		Users.find({photo: {$ne : 'nophoto.png'}}, function(err, users){
+			console.log(users);
+			users.forEach(function(user){
+				user.absPathPhoto = 'http://yourselfr.com/upload/avatar' + user.photo;
+			});
+		});
+	}
+
+
+	this.recountPosts = function(){
+		Users.find({}, function(err, users){
+			users.forEach(function(user){
+				Posts.count({created_by: user._id}, function(err, count){
+					user.stats.posts = count;
+					user.save();
+				});
+			});
+		});
+	}
 };
 
+original = '9b317a357323f9639c1c20437d951603';
 var control = new Control();
-control.countUnpublishedPosts();
 
 router.post('', function(req, res){
-	var original = '9b317a357323f9639c1c20437d951603';
 	var key = req.body.key;
 
 	if(original === key){
@@ -83,5 +143,69 @@ router.post('', function(req, res){
 	console.log(key);
 });
 
+router.post('/count-followers-following', function(req, res){
+	var key = req.body.key;
+	if(key == original){
+		control.countFollowersAndFollowing();
+		return res.send({message: "Подписчики и подписки всех пользователей пересчитаны."});
+	} else {
+		return res.send({message: "Security Key is Invalid"});
+	}
+});
+
+router.post('/count-unpublished-posts', function(req, res){
+	var key = req.body.key;
+	if(key == original){
+		control.countUnpublishedPosts();
+		return res.send({message: "Неопобликованные посты всех пользователей пересчитаны."});
+	} else {
+		return res.send({message: "Security Key is Invalid"});
+	}
+});
+
+router.post('/recount-posts', function(req, res){
+	var key = req.body.key;
+	if(key == original){
+		control.recountPosts();
+		return res.send({message: "Счётчик постов всех пользователей пересчитан."});
+	} else {
+		return res.send({message: "Security Key is Invalid"});
+	}
+})
+
+router.post('/ban/user', function(req, res){
+	var key = req.body.key;
+	var userID = req.body.userID;
+	var reason = req.body.reason;
+
+	if(key == original){
+		if(control.banUser(userID, reason)){
+			return res.send({message: "Пользователь был забанен успешно."});
+		} else {
+			return res.send({message: "Возникли какие-то трудности при бане пользователя."});
+		}
+	}
+});
+
+router.post('/unban/user', function(req, res){
+	var key = req.body.key;
+	var userID = req.body.userID;
+	if(key = original){
+		if(control.unbanUser(userID, reason)){
+			return res.send({message: "Пользователь был забанен успешно."});
+		} else {
+			return res.send({message: "Возникли какие-то трудности при бане пользователя."});
+		}
+	}
+});
+
+router.post('/delete/user', function(req, res){
+	var key = req.body.key;
+	var userID = req.body.userID;
+	if(key = original){
+		control.deleteUser(userID);
+		return res.send({message: "Пользователь был удалён успешно."});
+	}
+});
 
 module.exports = router;

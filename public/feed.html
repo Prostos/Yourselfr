@@ -1,9 +1,44 @@
 <div ng-controller="feed">
 	<h3>Новостная <b>лента</b></h3>
 	<div ng-switch="postsEmpty">
-		<div ng-switch-when="true">
+		<div ng-switch-when="true" ng-controller="popularPeople">
+			<div class="border-top"></div>
 			<div class="rate_empty_line"></div>
 			<p class="text-center">Записей пока нет. Подпишитесь на кого-нибудь,<br> чтобы всегда получать свежие обновления.</p>
+			<div class="border-top"></div>
+			<div class="rate_empty_line"></div>
+			
+
+
+			<style type="text/css">
+				.follower {
+					margin: 5px 0px 5px 0px;
+					display: inline-block;
+					width: 100px;
+				}
+				.followers {
+					margin-left: 30px;
+				}
+				.follower-name {
+					margin-top: 10px;
+					margin-left: 20px;
+					word-wrap: normal;
+				}
+			</style>
+			<div class="followers">
+				<div ng-repeat="follower in users" class="follower">
+					<a href="{{follower.alias}}">
+						<div style="margin-left:20px;"><img title="{{follower.status}}" src="upload/avatar/{{follower.photo}}" class="avatar" width="80" height="80"></div>
+						<div class="follower-name text-center">
+							<b>{{follower.username}} </b>
+							<div class="inline-block" ng-show="follower.online.status">
+								<img class="online" src="css/img/icons/online.png" width="9">
+								<md-tooltip md-direction="top" style="margin-left: 12px">Этот пользователь сейчас онлайн</md-tooltip>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
 		</div>
 		<div ng-switch-when="false">
 			<style>
@@ -11,14 +46,14 @@
 					margin-top: -10px;
 					margin-left: 10px;
 				}
-				.feed-post .username {
+				.username {
 					margin-bottom: 10px;
 				}
 				.border-top {
 					width: 650px;
 					margin-left: -25px;
 					margin-top: 0px;
-					min-height: 120px;
+					min-height: 105px;
 				}
 				.block {
 					padding-bottom: 0px !important;
@@ -44,16 +79,16 @@
 						<div class="h3 wallpost-text inline-block" ng-bind-html="post.text | emoji"></div>
 						<div ng-controller="likes" class="fl-r like" style="margin-right: 10px; margin-top: 20px;">
 							<div ng-click="like(post._id)">
-								<div class="like-button"></div>
+								<div class="like-button" ng-class="{'true':'like-done', 'false':'like-usual'}[post.isLiked]"></div>
 								<div>
 									<a class="like-text">нравится 
 										<span ng-hide="showLikes">{{post.likes}}</span>
-										<span ng-show="showLikes">{{like.now}}</span>
+										<span ng-show="showLikes">{{likesNow}}</span>
 									</a>
 								</div>
 							</div>
 						</div>
-						<div ng-controller="timeCtrl as main" class="h4" style="margin-top:20px; margin-bottom:10px;">
+						<div ng-controller="timeCtrl as main" class="h5" style="margin-top:20px;">
 							<a class="text-muted " am-time-ago="post.created_at"></a>
 						</div>
 					</div>

@@ -19,27 +19,25 @@ router.post('/avatar', function(req, res) {
 		console.log(file);
 		console.log("Uploading: " + filename); 
 
-		var path = 'public/upload/avatar/';
+		
 
 		var regex = new RegExp(/^(.*)\./);
 		var filename = filename.toString().replace(regex, req.session.passport.user + ".");
+		var path = 'public/upload/avatar/'+ filename;
 
-		fstream = fs.createWriteStream(path + filename);
+		fstream = fs.createWriteStream(path);
 		file.pipe(fstream);
 		fstream.on('close', function () {
-			lwip.open(path + filename, function(err, image){
+			lwip.open(path, function(err, image){
 				if(err) throw err;
 				// image.resize(...), etc.
-				image.resize(200, 200, function(err, image){
-
-					image.toBuffer('jpg', {quality: 80}, function(err, buffer){
-						
-						image.writeFile(path + filename, function(er){
+				image.scale(0.7, function(err, image){
+					image.toBuffer('jpg', {quality: 70}, function(err, buffer){
+						image.writeFile(path, function(er){
 							finish();
 						});
-					})
-				})
-				
+					});
+				});
 			});
 
 
@@ -77,11 +75,11 @@ router.post('/avatar/delete', function(req, res){
 router.post('/header', function(req, res) {
 	var fstream;
 	req.pipe(req.busboy);
-	req.busboy.on('file', function (fieldname, file, filename) {
+	req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
 		console.log("Uploading: " + filename); 
-		
 
-		
+		console.log(mimetype);
+
 		var regex = new RegExp(/^(.*)\./);
 		var filename = filename.toString().replace(regex, req.session.passport.user + ".");
 		
@@ -91,13 +89,12 @@ router.post('/header', function(req, res) {
 		file.pipe(fstream);
 		fstream.on('close', function () {
 			lwip.open(path, function(err, image){
-				// if (err) throw err;
-				// image.toBuffer('jpg', {quality: 30}, function(err, buffer){
-				// 	fs.writeFile(path, buffer, function(err){
-						
-				// 	});
-				// });
-				finish();
+				if (err) throw err;
+				image.scale(0.7, function(err, image){
+					image.writeFile(path, 'jpg', function(er){
+						finish();
+					});
+				});
 			});
 
 			var finish = function(){

@@ -8,6 +8,7 @@ var userSchema = new mongoose.Schema({
 	about: String,
 	status: String,
 	photo: {type: String, default: 'nophoto.png'},
+	absPathPhoto: {type: String, default: ''},
 	header: {type: String, default: 'noheader.png'},
 	social: {
 		vk: {type: String, default: ''},
@@ -24,11 +25,16 @@ var userSchema = new mongoose.Schema({
 		followers: {type: Number, default: 0},
 		following: {type: Number, default: 0},
 		visits: {type: Number, default: 0},
-		unpublishedPosts: {type: Number, default: 0}
+		unpublishedPosts: {type: Number, default: 0, min:0}
 	},
 	online: {
 		status: Boolean,
 		time: Date
+	},
+	vkID: {type: String, default: '0'},
+	ban: {
+		status: {type: Boolean, default: false},
+		reason: {type: String, deafult: ""}
 	}
 });
 
