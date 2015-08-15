@@ -1,4 +1,4 @@
-app.controller('posts', function($scope, $http, $location, api, $rootScope){
+app.controller('posts', function($scope, $http, $location, api, $rootScope, $timeout){
 	var alias = $location.path().substr(1);
 	$scope.getPosts = function(){
 		api.Posts.query({alias: alias}, function success(posts){
@@ -38,20 +38,54 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 	}
 
 	$scope.newPost = {};
+
+	
+
+	// text.addEventListener("DOMSubtreeModified", function(){
+
+	// 	// Parse smile images into symbols
+	// 	var fReg = /<img[^>]*>/ig;
+	// 	var sReg = /tag=\".{0,10}\"/ig;
+
+		
+
+	// 	var fArr = text.innerHTML.match(fReg); //Array with html codes of images
+	// 	var sArr = text.innerHTML.match(sReg); //Array with smile codes from html
+	// 	console.log(sReg);
+
+	// 	var test = text.innerHTML;
+	// 	for(var i=0; i<fArr.length; i++){
+	// 		test = test.replace(fArr[i], sArr[i]);
+	// 		console.log(test);
+	// 	}
+	// 	$scope.newPost.text = test;
+	// 	console.log(test);
+	// });
+
+
+
+
 	var text = document.getElementById("postForm");
-
-
 	$scope.post = function(){
+		var reg = /^\s{0,}$/g;
+		if(text.innerText.match(reg)){
+			return false;
+		}
+
 		$scope.newPost.created_by = alias;
+		$scope.newPost.text = text.innerHTML;
+
+		$scope.newPost.text = $scope.newPost.text.replace(/^\s{0,}/, "");
 
 		
 		console.log(text.innerHTML);
-		$scope.newPost.text = text.innerHTML;
 
 		api.Posts.save($scope.newPost, function(res){
 			console.log(res);
 			if(res.status == 1){
 				$scope.newPost.text = "";
+				$scope.textShow = "";
+				text.innerHTML = "";
 				$scope.getPosts();
 			}
 			$scope.postStatus = res.message;
@@ -104,12 +138,11 @@ app.controller('posts', function($scope, $http, $location, api, $rootScope){
 	  return this.split(search).join(replace);
 	}
 	$scope.toPost = function(smile){
+		var post = document.getElementById("postForm");
 		if(!$scope.textShow){
-			$scope.textShow = "<img src='images/emoji/"+ smile.source +".png' width='18'>" + " ";
-			$scope.textSend =  smile.title +" ";
+			post.innerHTML += " <img src='images/emoji/"+ smile.source +".png' width='18' tag="+smile.title+">  ";
 		} else {
-			$scope.textShow += " " + "<img src='images/emoji/"+ smile.source +".png' width='18'>" + " ";
-			$scope.textSend += " "+ smile.title +" ";
+			post.innerHTML += " <img src='images/emoji/"+ smile.source +".png' tag="+smile.title+" width='18'>  ";
 		}
 	}
 

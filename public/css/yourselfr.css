@@ -329,8 +329,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .like-button {
-	width: 48px;
-	height: 48px;
 	display: inline-block;
 	
 	-webkit-mask: url(img/icons/like_svg.svg) no-repeat 50% 50%;
@@ -338,25 +336,25 @@ h1, h2, h3, h4, h5, h6 {
 	-webkit-mask-size: cover;
 	mask-size: cover;
 
-	width: 32px;
-	height: 32px;
+	width: 30px;
+	height: 30px;
 	cursor: pointer;
 	opacity: .1;
-	margin:-22px 5px 0px 4px;
+	margin:-22px 5px 6px 5px;
 	transition: opacity .5s;
 	outline: 0px;
 	outline-width: 0px;
 	mask-size: cover;
 	-webkit-mask-size: cover;
 	display: inline-block;
-	transition: transform 1s, background-color 2s, opacity 1s;
+	transition: transform .4s, background-color 2s, opacity .4s;
 }
 .like-usual {
 	background: #148BC3;
 }
 .like-done {
 	background: #148BC3;
-	opacity: .7 !important;
+	opacity: .6 !important;
 	-webkit-transform: rotate(360deg);
 	-o-transform: rotate(360deg);
 	-moz-transform: rotate(360deg);

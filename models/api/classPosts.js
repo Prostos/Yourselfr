@@ -50,10 +50,12 @@ router.get('', function(req, res){
 								callback(null);
 							});
 						}, function(err){
-							console.log(posts);
 							res.send(posts);
 						});
 					} else {
+						posts.forEach(function(post){
+							post.isLiked = false;
+						});
 						res.send(posts);
 					}
 					
@@ -104,6 +106,8 @@ router.get('/feed', function(req, res){
 							post.isLiked = false;
 						}
 					});
+				} else {
+					post.isLiked = false;
 				}
 			});
 
@@ -135,11 +139,12 @@ router.post('', function(req, res){
 			if(!user){
 				res.send({message: "User not found."});
 			} else {
-				var newPost = new Posts();
-		
-				if(!req.body.text || req.body.text == ''){
+				
+
+				var text = compileText(req.body.text);
+				if(!text || text == ''){
 					res.send({message: ""});
-				} else if(req.body.text.length > 300){
+				} else if(text.length > 300){
 					res.send({message: "Максимальная длина поста — 299 символов"});
 				} else {
 
@@ -148,13 +153,14 @@ router.post('', function(req, res){
 					// Otherwise continue
 					
 					Posts.findOne({}).sort({_id: -1}).exec(function(err, post){
-						if(post.text == req.body.text){
+						if(post.text == text){
 							return res.send({message: "Вы не можете отправить две одинаковые записи подряд."});
 						}
 
 						// Check user profile type
 						// If 1 send to wall.
 						// If 2 send to moderating
+						var newPost = new Posts();
 
 						if(user.profileType == 2){
 							newPost.type = 2;
@@ -163,12 +169,12 @@ router.post('', function(req, res){
 						} else {
 							newPost.type = 1;
 						}
-						newPost.text = req.body.text;
+						newPost.text = text;
 						newPost.created_by = user._id;
 						newPost.save(function(err){
 							if(err) throw err;
 
-							var message = (user.profileType == 1) ? "Опубликовано" : "Запись появится в блоге, как только "+ user.username + " её одобрит.";
+							var message = (user.profileType == 1) ? "" : "Запись появится в блоге, как только "+ user.username + " её одобрит.";
 							res.send({status: 1, message: message});
 
 							//Count the value of user's posts after publishing.
@@ -179,6 +185,51 @@ router.post('', function(req, res){
 				}
 			}
 		});
+	}
+
+	function compileText(text){
+			var text = text;
+			if(!text){
+				return false;
+			}
+
+			// Parse smile images into symbols
+			var fReg = /<img[^>]*>/ig;
+			var sReg = /tag=\".{0,10}\"/ig;
+
+			
+
+			var fArr = text.match(fReg); //Array with html codes of images
+			var sArr = text.match(sReg); //Array with smile codes from html
+
+			if(fArr){
+				for(var i=0; i<fArr.length; i++){
+					var smile = sArr[i].toString();
+					var replaced = smile.slice(5, smile.length -1);
+					text = text.replace(fArr[i], replaced);
+				}
+			}
+			
+			
+			text = escapeHtml(text);
+			console.log(text);
+			return text;
+
+			function escapeHtml(text) {
+				var text = text
+					.replace(/\&nbsp;/g, " ")
+					.replace(/<div>/g, "")
+					.replace(/<\/div>/g, "")
+					.replace(/<br>/g, "\r\n")
+
+					.replace(/&/g, "&amp;")
+					.replace(/</g, "&lt;")
+					.replace(/>/g, "&gt;")
+					.replace(/"/g, "&quot;")
+					.replace(/'/g, "&#039;")
+					.replace(/^\s|\s$/g, '');
+				return text;
+			}
 	}
 });
 
@@ -263,10 +314,9 @@ router.post('/moderation', function(req, res){
 							post.type = 1;
 							user.stats.unpublishedPosts -= 1;
 
-							console.log(user.stats.unpublishedPosts);
 							post.save();
 							user.save();
-							res.send({status: 1, message: "Опубликовано"});
+							res.send({status: 1, message: ""});
 						} else if (action == 'remove'){
 							Posts.findByIdAndRemove(id, function(err){
 								if(err) throw err;
@@ -298,7 +348,6 @@ router.get('/random', function(req, res){
 					likes: post.likes,
 					_id: post._id
 				};
-				console.log(responsePost);
 
 				res.send(responsePost);
 			}

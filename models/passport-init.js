@@ -108,9 +108,9 @@ module.exports = function(passport){
 	);
 
 	passport.use(new VKontakteStrategy({
-			clientID:     5014067,
-			clientSecret: 'A0FPB99jQafaj8zraMyY',
-			callbackURL:  "http://localhost:1337/auth/vk/callback"
+			clientID:     5023767,
+			clientSecret: '6mZAz0f8JfYiZqEzZ9Y',
+			callbackURL:  "http://yourselfr.com/auth/vk/callback"
 		},
 		function(accessToken, refreshToken, profile, done) {
 

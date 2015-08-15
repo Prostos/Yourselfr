@@ -10,7 +10,7 @@ app.controller('user', function($scope, $http, $routeParams, $location, api, $ro
 			$scope.user = res;
 			var visits = $scope.user.stats.visits;
 			if(visits > 1000){
-				visits = Math.floor(visits/100).toString() + "K";
+				visits = Math.floor(visits/1000).toString() + "K";
 				$scope.user.stats.visits = visits;
 			}
 		}
